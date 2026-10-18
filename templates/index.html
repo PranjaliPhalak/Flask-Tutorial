@@ -1,25 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Hello world page</title>
-</head>
-<body>
-    <h1>Courses: </h1>
-    <ul>
-    {% for course in courses %}
-    <li>{{loop.index0}} {{course}}</li>
-    {% endfor %}
-    </ul>
-
-    <hr>
-   
-    <ul>
-    {% for key, value in student.items() %}
-    <li>{{key}} : {{value}}</li>
-    {% endfor %}
-    </ul>
-    
-</body>
-</html>
-
-
+{% extends "base.html" %}
+{% block content %}
+<h2>Welcome to my project</h2>
+<p>This is Home Page</p>
+{% endblock %}
