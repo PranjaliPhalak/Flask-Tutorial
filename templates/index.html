@@ -1,11 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container">
-<h1>Welcome to my project</h1>
-<button onclick="showMsg()" class='btn btn-secondary'>Click me</button>
-<button onclick="showMsg()" class='btn btn-primary'>Click me</button>
-<button onclick="showMsg()" class='btn btn-warning'>Click me</button>
-<button onclick="showMsg()" class='btn btn-danger'>Click me</button>
+<h1 class ="text-4xl font-bold text-red-600">Welcome to my project</h1>
+<button onclick="showMsg()" class='mt-6 bg-blue-600 text-white  px-5 py-2 rounded-lg'>Click me</button>
+
 <p>This is Home Page</p>
 </div>
 <div class="container">
@@ -13,10 +11,6 @@
         <div class="col-md-4">Course 1</div>
         <div class="col-md-4">Course 2</div>
         <div class="col-md-4">Course 3</div>
-
-
     </div>
-
-
 </div>
 {% endblock %}
