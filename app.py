@@ -1,8 +1,30 @@
-from flask import Flask,render_template, request,redirect,url_for,flash, session
+from flask import Flask,render_template, request,redirect,url_for,flash,session
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 
-app.secret_key = "change-this-in-prod"
+app.secret_key = os.getenv("SECRET_KEY")
+
+UPLOAD_FOLDER = "uploads"
+
+os.makedirs(UPLOAD_FOLDER,exist_ok=True)
+
+@app.route("/upload", methods=["GET","POST"])
+def upload():
+    if request.method == "POST":
+        file = request.files.get("file")
+        if not file:
+            return "Please select a file !"
+        if file.filename == "":
+            return "Please select a file !"
+        file.save(
+            os.path.join(UPLOAD_FOLDER,file.filename)
+        )
+        return "File uploaded successfully !"
+    return render_template("upload.html")
 
 @app.errorhandler(404)
 def page_not_found(error):
@@ -12,14 +34,9 @@ def page_not_found(error):
 def internal_server_error(error):
     return render_template("500.html"),500
 
-@app.route("/test")
-def test():
-    result =10/0
-    return str(result)
-
 @app.route("/login")
 def login():
-    session["username"]= "Pranjal"
+    session["username"]= "Mohit"
     return "Login Successful !"
 
 @app.route("/deshboard")
@@ -31,12 +48,13 @@ def deshboard():
 
 @app.route("/logout")
 def logout():
-    session.pop("username", None)
+    session.pop("username",None)
     return "Logged Out !"
- 
+
 @app.route("/")
 def home():
-    return render_template("index.html")
+    app_name = os.getenv("APP_NAME")
+    return f"Welcome to {app_name}"
 
 @app.route("/about")
 def about():
@@ -69,4 +87,4 @@ def success():
     return "Registration Successful"
 
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run(debug=True)
