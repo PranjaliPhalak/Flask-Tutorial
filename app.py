@@ -21,4 +21,12 @@ def home():
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
+        user = User(
+            name=" Pranjal",
+            email="pranjal@example.com",
+            age=25
+        )
+        db.session.add(user)
+        db.session.commit()
+        print("User created successfully.")
     app.run(debug=True)
