@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify, request, render_template
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -18,15 +18,53 @@ class User(db.Model):
 def home():
     return "Flask + SQLite + SQLAlchemy is working !"
 
+@app.route("/create-user", methods=["POST"])
+def create_user():
+    data = request.get_json()
+
+    name = data.get("name")
+    email = data.get("email")
+    age = data.get("age")   
+
+    user = User(
+        name=name,
+        email=email,
+        age=age
+    )
+    db.session.add(user)
+    db.session.commit()
+    return jsonify({"message": "User created successfully.",
+                    "user_id": user.id})
+
+@app.route("/get-users", methods=["GET"])
+def get_users():
+    users = User.query.all()
+    user_data = []
+    for user in users:
+        user_data.append({
+            "id": user.id,
+            "name": user.name,
+            "email": user.email,
+            "age": user.age
+        })
+    return jsonify(user_data) 
+
+@app.route("/users1")
+def users():
+    users = User.query.all()
+    return render_template("users.html", users=users)
+
+@app.route("/users/<int:id>", methods=["GET"])
+def get_user(id):
+    user = db.get_or_404(User, id)
+    return jsonify  ({
+        "id": user.id,
+        "name": user.name,
+        "email": user.email,
+        "age": user.age
+    })
+
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
-        user = User(
-            name=" Pranjal",
-            email="pranjal@example.com",
-            age=25
-        )
-        db.session.add(user)
-        db.session.commit()
-        print("User created successfully.")
     app.run(debug=True)
